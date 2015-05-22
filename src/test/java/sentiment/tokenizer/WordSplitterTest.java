@@ -1,4 +1,4 @@
-package tokenizer;
+package sentiment.tokenizer;
 
 import org.testng.annotations.Test;
 
@@ -12,8 +12,8 @@ public class WordSplitterTest {
 
     public void shouldDetectWords() {
 
-        final String input = "Ala ma kota, ale nie ma psa.";
-        final List<String> expectedWords = newArrayList("Ala", "ma", "kota", "ale", "nie", "ma", "psa");
+        final String input = "Ala ma kota, ale nie ma psa. Czy to prawda?";
+        final List<String> expectedWords = newArrayList("Ala", "ma", "kota", "ale", "nie", "ma", "psa", "Czy", "to", "prawda");
         WordSplitter wordSplitter = new WordSplitter();
 
         List<String> words = wordSplitter.getWords(input);

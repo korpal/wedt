@@ -1,4 +1,4 @@
-package tokenizer;
+package sentiment.tokenizer;
 
 import com.google.common.io.Resources;
 import net.sourceforge.segment.TextIterator;
@@ -8,6 +8,7 @@ import net.sourceforge.segment.srx.io.Srx2Parser;
 import net.sourceforge.segment.srx.legacy.AccurateSrxTextIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -17,22 +18,17 @@ import java.net.URL;
 import static net.sourceforge.segment.util.Util.getFileInputStream;
 import static net.sourceforge.segment.util.Util.getReader;
 
+@Service
 public class SentenceSplitter {
 
-    private static final String SRX_FILE_NAME = "tokenizer/segment.srx";
+    private static final String SRX_FILE_NAME = "segment.srx";
     private static final String LANGUAGE_CODE = "pl";
-
-    private static SentenceSplitter INSTANCE = new SentenceSplitter();
-
-    public static SentenceSplitter getInstance() {
-        return INSTANCE;
-    }
 
     private Logger logger = LoggerFactory.getLogger(SentenceSplitter.class);
     private SrxDocument document;
 
-    private SentenceSplitter() {
-        URL srcURL = Resources.getResource(SRX_FILE_NAME);
+    public SentenceSplitter() {
+        URL srcURL = Resources.getResource(this.getClass(), SRX_FILE_NAME);
 
         try {
             Reader srxReader = getReader(getFileInputStream(srcURL.toURI().getPath()));
