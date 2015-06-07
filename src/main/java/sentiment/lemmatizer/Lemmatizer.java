@@ -1,29 +1,21 @@
 package sentiment.lemmatizer;
 
-import com.google.common.io.Resources;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.io.*;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-@Service
+@Component
 public class Lemmatizer {
 
-    private static final String DICTIONARY_FILE_NAME = "lemmatizer.txt";
+    private Map<String, String> dictionary;
 
-    private Logger logger = LoggerFactory.getLogger(Lemmatizer.class);
-    private Map<String, String> dictionary = new HashMap<>();
-
-    public Lemmatizer() {
-        URL dictURL = Resources.getResource(this.getClass(), DICTIONARY_FILE_NAME);
-
+    public void createDictionary(File input) throws IOException {
         try {
-            InputStream dictInputStream = new FileInputStream(dictURL.toURI().getPath());
+            dictionary = new HashMap<>();
+
+            InputStream dictInputStream = new FileInputStream(input);
             Reader inputStreamReader = new InputStreamReader(dictInputStream, "utf-8");
             BufferedReader dictReader = new BufferedReader(inputStreamReader);
 
@@ -32,10 +24,14 @@ public class Lemmatizer {
                 String[] parts = line.split("\t");
                 dictionary.put(parts[0], parts[1]);
             }
-
-        } catch (URISyntaxException | IOException e) {
-            logger.error("Error while creating Lemmatizer", e);
+        } catch(IOException e) {
+            dictionary = null;
+            throw e;
         }
+    }
+
+    public boolean isReady() {
+        return dictionary != null;
     }
 
     public String getLemma(final String word) {

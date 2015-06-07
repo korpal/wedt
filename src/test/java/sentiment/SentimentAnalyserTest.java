@@ -27,7 +27,7 @@ public class SentimentAnalyserTest extends AbstractTestNGSpringContextTests {
 
         while(sentencesIterator.hasNext()) {
             String sentence = sentencesIterator.next();
-            Integer sentiment = sentimentAnalyser.calcSentiment(sentence);
+            Double sentiment = sentimentAnalyser.calcSentiment(sentence);
 
             System.out.println(sentiment + " " + sentence);
         }

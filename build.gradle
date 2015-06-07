@@ -1,4 +1,8 @@
-apply plugin: 'java'
+
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '1.2.1'
+}
 
 version = '1.0'
 
@@ -13,9 +17,24 @@ dependencies {
     compile 'org.slf4j:slf4j-simple:1.7.12'
     compile 'org.springframework:spring-core:4.1.6.RELEASE'
     compile 'org.springframework:spring-context:4.1.6.RELEASE'
-    compile 'net.openhft:koloboke-api-jdk8:0.6.7'
-    compile 'net.openhft:koloboke-impl-jdk8:0.6.7'
+    compile 'org.apache.poi:poi-scratchpad:3.2-FINAL'
 
     testCompile 'org.testng:testng:6.9.4'
     testCompile 'org.springframework:spring-test:4.1.6.RELEASE'
+}
+
+jar {
+    manifest {
+        attributes("Main-Class": "App")
+    }
+    from {
+        configurations.compile.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+}
+
+shadowJar {
+    mergeServiceFiles('META-INF/spring.handlers')
+    mergeServiceFiles('META-INF/spring.schemas')
 }

@@ -9,4 +9,6 @@
 
     <context:component-scan base-package="sentiment" />
 
+    <context:property-placeholder location="file:sentiment.properties" />
+
 </beans>
