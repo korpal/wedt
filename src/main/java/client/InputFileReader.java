@@ -1,11 +1,13 @@
 package client;
 
 import org.apache.poi.hwpf.extractor.WordExtractor;
+import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.rtf.RTFEditorKit;
+import java.io.*;
 import java.util.Scanner;
 
 public class InputFileReader {
@@ -20,15 +22,34 @@ public class InputFileReader {
 
         switch (fileExtension) {
             case "doc":
+                return readDOCFile(file);
             case "docx":
+                return readDOCXFile(file);
             case "rtf":
-                return readWordFile(file);
+                return readRTFFile(file);
             default:
                 return readTextFile(file);
         }
     }
 
-    private String readWordFile(final File file) throws IOException {
+    private String readRTFFile(File file) throws IOException {
+        RTFEditorKit rtfParser = new RTFEditorKit();
+        Document document = rtfParser.createDefaultDocument();
+        try {
+            rtfParser.read(new FileInputStream(file), document, 0);
+            return document.getText(0, document.getLength());
+        } catch (BadLocationException e) {
+            throw new IOException(e.getLocalizedMessage());
+        }
+    }
+
+    private String readDOCXFile(File file) throws IOException {
+        XWPFDocument document = new XWPFDocument(new FileInputStream(file));
+        XWPFWordExtractor wordExtractor = new XWPFWordExtractor(document);
+        return wordExtractor.getText();
+    }
+
+    private String readDOCFile(final File file) throws IOException {
         WordExtractor wordExtractor = new WordExtractor(new FileInputStream(file));
         return wordExtractor.getText();
     }

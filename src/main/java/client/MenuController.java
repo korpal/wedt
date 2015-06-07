@@ -210,6 +210,9 @@ public class MenuController {
 
             alert.showAndWait();
             return;
+        } catch(Exception e) {
+            logger.info("Error while loading file.", e);
+            throw e;
         }
 
         fillSentimentTable(content);

@@ -18,6 +18,7 @@ dependencies {
     compile 'org.springframework:spring-core:4.1.6.RELEASE'
     compile 'org.springframework:spring-context:4.1.6.RELEASE'
     compile 'org.apache.poi:poi-scratchpad:3.2-FINAL'
+    compile 'org.apache.poi:poi-ooxml:3.7-beta3'
 
     testCompile 'org.testng:testng:6.9.4'
     testCompile 'org.springframework:spring-test:4.1.6.RELEASE'
